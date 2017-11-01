@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lynn-ESP8266", "Lynn-ESP8266\Lynn-ESP8266.vcxproj", "{BD18A51A-00F0-4F5E-BED6-5B6F15BC0D7E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|VisualGDB = Debug|VisualGDB
+		Release|VisualGDB = Release|VisualGDB
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD18A51A-00F0-4F5E-BED6-5B6F15BC0D7E}.Debug|VisualGDB.ActiveCfg = Debug|VisualGDB
+		{BD18A51A-00F0-4F5E-BED6-5B6F15BC0D7E}.Debug|VisualGDB.Build.0 = Debug|VisualGDB
+		{BD18A51A-00F0-4F5E-BED6-5B6F15BC0D7E}.Release|VisualGDB.ActiveCfg = Release|VisualGDB
+		{BD18A51A-00F0-4F5E-BED6-5B6F15BC0D7E}.Release|VisualGDB.Build.0 = Release|VisualGDB
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

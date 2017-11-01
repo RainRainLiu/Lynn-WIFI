@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source files">
+      <UniqueIdentifier>{a22d2da4-58ee-433d-ac47-d083aeb38a75}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header files">
+      <UniqueIdentifier>{c1000dec-40fa-4afe-84e4-aee8e2733669}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource files">
+      <UniqueIdentifier>{3b973273-2228-46c2-9e48-d754127b5715}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Source files\Device-specific files">
+      <UniqueIdentifier>{07548530-31c0-4887-bab4-8784505ac40c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Device-specific files\Drivers">
+      <UniqueIdentifier>{b780040d-e794-4d57-b772-9ce99b2bde5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Device-specific files">
+      <UniqueIdentifier>{ecf20cb1-cf58-4fc0-af61-91a2ad4a0562}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Device-specific files\SDK">
+      <UniqueIdentifier>{53d6e525-4533-437a-a137-275586fc5458}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Device-specific files\Drivers">
+      <UniqueIdentifier>{b4bf069c-887b-4404-85f3-35022ff24d8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VisualGDB settings">
+      <UniqueIdentifier>{05a417ad-16dc-4403-889a-b9ef443c364a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Application">
+      <UniqueIdentifier>{f8183ea2-0351-446e-8134-592fa0cbc3a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Application">
+      <UniqueIdentifier>{01a5cdbf-f5aa-4ebe-aeec-f5e784dd6147}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="esp8266.props">
+      <Filter>Source files\Device-specific files</Filter>
+    </None>
+    <ClCompile Include="$(BSP_ROOT)\GDBStub\gdbstub-entry.S">
+      <Filter>Source files\Device-specific files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(BSP_ROOT)\GDBStub\gdbstub.c">
+      <Filter>Source files\Device-specific files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(BSP_ROOT)\sysprogs\stubs.c">
+      <Filter>Source files\Device-specific files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\gpio.c">
+      <Filter>Source files\Device-specific files\Drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\hw_timer.c">
+      <Filter>Source files\Device-specific files\Drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\i2c_master.c">
+      <Filter>Source files\Device-specific files\Drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\spi_interface.c">
+      <Filter>Source files\Device-specific files\Drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\uart.c">
+      <Filter>Source files\Device-specific files\Drivers</Filter>
+    </ClCompile>
+    <ClInclude Include="user_config.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\GDBStub\gdbstub-cfg.h">
+      <Filter>Header files\Device-specific files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\GDBStub\gdbstub-entry.h">
+      <Filter>Header files\Device-specific files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\GDBStub\gdbstub.h">
+      <Filter>Header files\Device-specific files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\airkiss.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\c_types.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\espconn.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\espnow.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp_common.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp_libc.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp_misc.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp_softap.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp_spiffs.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp_ssc.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp_sta.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp_system.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp_timer.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp_wifi.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp_wps.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\mesh.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\pwm.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\queue.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\smartconfig.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\spi_flash.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\upgrade.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp8266\eagle_soc.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp8266\esp8266.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp8266\ets_sys.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp8266\gpio_register.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp8266\pin_mux_register.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp8266\spi_register.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp8266\timer_register.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\esp8266\uart_register.h">
+      <Filter>Header files\Device-specific files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\include\gpio.h">
+      <Filter>Header files\Device-specific files\Drivers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\include\hw_timer.h">
+      <Filter>Header files\Device-specific files\Drivers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\include\i2c_master.h">
+      <Filter>Header files\Device-specific files\Drivers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\include\spi_interface.h">
+      <Filter>Header files\Device-specific files\Drivers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\include\spi_register.h">
+      <Filter>Header files\Device-specific files\Drivers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\include\uart.h">
+      <Filter>Header files\Device-specific files\Drivers</Filter>
+    </ClInclude>
+    <None Include="Lynn-ESP8266-Debug.vgdbsettings">
+      <Filter>VisualGDB settings</Filter>
+    </None>
+    <None Include="Lynn-ESP8266-Release.vgdbsettings">
+      <Filter>VisualGDB settings</Filter>
+    </None>
+    <None Include="esp8266.xml">
+      <Filter>VisualGDB settings</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="user_main.c">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\SocketServer.c">
+      <Filter>Source files\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\SPI.c">
+      <Filter>Source files\Application</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Application\MyDefine.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\SocketServer.h">
+      <Filter>Header files\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\spi.h">
+      <Filter>Header files\Application</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
