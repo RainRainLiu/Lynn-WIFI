@@ -26,7 +26,7 @@ void user_init(void);
 
 
 
-static Socket_RxCB(void *pvParameters, uint8 *pData, uint32 unLength)
+static void Socket_RxCB(void *pvParameters, uint8 *pData, uint32 unLength)
 {
 	os_printf("Socket RX %d\r\n", unLength);
 }
