@@ -7,6 +7,8 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "lwip/sockets.h"
+#include "freertos/queue.h"
+#include "freertos/timers.h"
 
 
 
@@ -14,20 +16,23 @@ typedef struct
 {
 	int nServerHandle; 	//服务端句柄
 	int anClientHandleTalbe[SOCKET_SERVER_MAXIMUN_CONNECTION];	//客户端句柄列表
-
-	SOCKET_SERVER_RECEIVE_CB ReceiveCB;
-	void *pArgCB;
+	uint8_t *pReading;	//正在读取的数据指针
+	xQueueHandle hClientQueue;
+	xTimerHandle hRxTimer;	//接收数据的定时器，定时器超时才可以往缓存区写入数据
 }SOCKET_SERVER_T;
 
 
 typedef struct
 {
 	int *pnSocketHandle;
+	uint8_t bReading;
 	SOCKET_SERVER_T *hServer;
 }SOCKET_RECEIVE_T;
 
 /******************************************************************
-* @函数说明：   进程
+* @函数说明：   接收客户端发送过来的数据，放入接收队列
+				为了防止多个客户端同时写入数据时，打乱了数据包顺序
+			    要等待其它客户端写完数据再写入
 * @输入参数：   void *pvParameters
 * @返回参数：
 * @修改记录：   2017/10/28 初版
@@ -39,6 +44,7 @@ static void SocketServer_ReveiveClient(void *pvParameters)
 	SOCKET_RECEIVE_T *receive = pvParameters;
 
 	int socketHandle = *receive->pnSocketHandle;
+	receive->bReading = 0;
 	uint8_t *rxBuf;
 	rxBuf = os_malloc(SCOKET_SERVER_RECEIVE_BUFF_LENGTH);  //分配内存
 
@@ -47,12 +53,27 @@ static void SocketServer_ReveiveClient(void *pvParameters)
 		int length = read(socketHandle, rxBuf, SCOKET_SERVER_RECEIVE_BUFF_LENGTH);	//接收数据
 		if (length > 0)
 		{
-			receive->hServer->ReceiveCB(receive->hServer->pArgCB, rxBuf, length);	//接收完成
+			if (receive->hServer->pReading == NULL)
+			{
+				
+			}
+			else if (*receive->hServer->pReading && receive->hServer->pReading != &receive->bReading)	//别的线程在往队里写入数据
+			{
+				while (*receive->hServer->pReading)	//等待完成
+				{
+					vTaskDelay(1);
+				}
+			}
+			
+			receive->bReading = 1;	//忙，正在读取
+			receive->hServer->pReading = &receive->bReading;	//执行当前对象的忙标志
+			xQueueSend(receive->hServer->hClientQueue, rxBuf, 1000);
+			xTimerReset(receive->hServer->hRxTimer, 1000);
 		}
 		else
 		{
 			close(socketHandle);
-			receive->pnSocketHandle = 0;
+			receive->pnSocketHandle = 0;	//清空指针
 			os_printf("read error %d\r\n", length);
 			break;
 		}
@@ -153,13 +174,19 @@ static void SocketServer_Task(void *pvParameters)
 	
 }
 
+void SocketServer_TimerCB(xTimerHandle xTimer)
+{
+	SOCKET_SERVER_T *server = pvTimerGetTimerID(xTimer);
+	server->pReading = 0;
+}
+
 /******************************************************************
 * @函数说明：   构造函数
 * @输入参数：   int port			服务器监听端口号
 * @返回参数：   SOCKET_SERVER_HANDLE_T 句柄
 * @修改记录：   2017/10/28 初版
 ******************************************************************/
-SOCKET_SERVER_HANDLE_T SocketServer_Create(int iListenPort, SOCKET_SERVER_RECEIVE_CB ReceiveCB, void *pvParameters)
+SOCKET_SERVER_HANDLE_T SocketServer_Create(int iListenPort)
 {
 	SOCKET_SERVER_T *server = os_malloc(sizeof(SOCKET_SERVER_T));
 
@@ -170,9 +197,32 @@ SOCKET_SERVER_HANDLE_T SocketServer_Create(int iListenPort, SOCKET_SERVER_RECEIV
 		return NULL;
 	}
 
-	server->ReceiveCB = ReceiveCB;
-	server->pArgCB = pvParameters;
-
+	server->hRxTimer = xTimerCreate("SoeketServer", 10, false, server, SocketServer_TimerCB);
 	xTaskCreate(SocketServer_Task, (signed char *)"SoeketServer", 256, server, 4, NULL);
+	return server;
+}
 
+/******************************************************************
+* @函数说明：   向客户端写入数据
+* @输入参数：   SOCKET_SERVER_HANDLE_T hHandle 句柄
+			    uint8_t *pData, 数据指针
+			    uint32_t unLength	数据长度
+* @返回参数：   SOCKET_SERVER_HANDLE_T 句柄
+* @修改记录：   2017/10/28 初版
+******************************************************************/
+int SocketServer_Write(SOCKET_SERVER_HANDLE_T hHandle, uint8_t *pData, uint32_t unLength)
+{
+	CheckNull(hHandle);
+
+	SOCKET_SERVER_T *server = hHandle;
+	uint8_t i;
+
+	for (i = 0; i < SOCKET_SERVER_MAXIMUN_CONNECTION; i++)
+	{
+		if (server->anClientHandleTalbe[i] != 0)
+		{
+			write(server->anClientHandleTalbe[i], pData, unLength);
+		}
+	}
+	return 1;
 }

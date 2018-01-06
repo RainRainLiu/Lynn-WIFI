@@ -18,6 +18,7 @@
     <ProjectFile>Lynn-ESP8266.vcxproj</ProjectFile>
     <RemoteBuildEnvironment>
       <Records />
+      <EnvironmentSetupFiles />
     </RemoteBuildEnvironment>
     <ParallelJobCount>1</ParallelJobCount>
     <SuppressDirectoryChangeMessages>true</SuppressDirectoryChangeMessages>
@@ -56,15 +57,15 @@
     <DebugMethod>
       <ID>gdbstub</ID>
       <Configuration xsi:type="com.visualgdb.edp.espxx.settings.gdbstub">
-        <COMPort>COM4</COMPort>
+        <COMPort>COM1</COMPort>
         <StubBaudRate>74880</StubBaudRate>
         <BootloaderBaudRate>115200</BootloaderBaudRate>
         <BootloaderResetDelay>50</BootloaderResetDelay>
         <BootloaderActivationSequence>!DTR;RTS;SLEEP;DTR;!RTS;SLEEP;!DTR;SLEEP</BootloaderActivationSequence>
         <FLASHSettings>
-          <Size>size32M_c1</Size>
+          <Size>size4M</Size>
           <Frequency>freq40M</Frequency>
-          <Mode>DIO</Mode>
+          <Mode>QIO</Mode>
         </FLASHSettings>
         <ProgramMode>Enabled</ProgramMode>
         <ResetMode>Soft</ResetMode>

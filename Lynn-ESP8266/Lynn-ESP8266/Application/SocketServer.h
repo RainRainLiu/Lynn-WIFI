@@ -14,5 +14,5 @@ typedef void(*SOCKET_SERVER_RECEIVE_CB)(void *, uint8 *pData, uint32 unLength);
 * @返回参数：   SOCKET_SERVER_HANDLE_T 句柄
 * @修改记录：   2017/10/28 初版
 ******************************************************************/
-SOCKET_SERVER_HANDLE_T SocketServer_Create(int iListenPort, SOCKET_SERVER_RECEIVE_CB ReceiveCB, void *pvParameters);
+SOCKET_SERVER_HANDLE_T SocketServer_Create(int iListenPort);
 #endif

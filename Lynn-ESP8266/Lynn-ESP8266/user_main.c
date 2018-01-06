@@ -57,6 +57,7 @@ void RAMFUNC user_init(void)
 #ifdef ESP8266_GDBSTUB
 	gdbstub_init();
 #endif
+	system_update_cpu_freq(160);	//160M
 
 	os_printf("\r\n******************************************\r\n");
 	os_printf("SDK version:%s\n", system_get_sdk_version());
@@ -93,7 +94,7 @@ void RAMFUNC user_init(void)
 
 	os_printf("statrt\r\n");
 
-	SocketServer_Create(6666, Socket_RxCB, NULL);
+	//SocketServer_Create(6666, Socket_RxCB, NULL);
 
 
 	xTaskCreate(ServerTask, (signed char *)"Server", 256, NULL, 2, NULL);
