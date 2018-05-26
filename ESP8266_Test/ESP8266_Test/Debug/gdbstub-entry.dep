@@ -1,0 +1,6 @@
+Debug/gdbstub-entry.o: \
+ C:/SysGCC/esp8266/esp8266-bsp/GDBStub/gdbstub-entry.S \
+ C:/SysGCC/esp8266/esp8266-bsp/GDBStub/gdbstub-cfg.h \
+ C:/SysGCC/esp8266/esp8266-bsp/RTOS-SDK/extra_include/xtensa/config/specreg.h \
+ C:/SysGCC/esp8266/esp8266-bsp/RTOS-SDK/extra_include/xtensa/corebits.h \
+ C:/SysGCC/esp8266/esp8266-bsp/RTOS-SDK/extra_include/xtensa/config/core-isa.h

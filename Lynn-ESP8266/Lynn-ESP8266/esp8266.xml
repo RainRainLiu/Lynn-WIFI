@@ -4,7 +4,7 @@
   <ToolchainVersion>
     <GCC>5.2.0</GCC>
     <GDB>7.11</GDB>
-    <Revision>11</Revision>
+    <Revision>15</Revision>
   </ToolchainVersion>
   <BspID>com.sysprogs.esp8266.core</BspID>
   <BspVersion>1.0</BspVersion>
@@ -13,7 +13,7 @@
     <Entries>
       <KeyValue>
         <Key>com.sysprogs.esp8266.icache_flash</Key>
-        <Value />
+        <Value>ICACHE_FLASH</Value>
       </KeyValue>
       <KeyValue>
         <Key>com.sysprogs.esp8266.linker_script</Key>
@@ -21,7 +21,7 @@
       </KeyValue>
       <KeyValue>
         <Key>com.sysprogs.esp8266.gdbstub</Key>
-        <Value>ESP8266_GDBSTUB</Value>
+        <Value />
       </KeyValue>
       <KeyValue>
         <Key>com.sysprogs.esp8266.gdbstub.break</Key>

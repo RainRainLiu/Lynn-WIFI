@@ -13,12 +13,6 @@
       <UniqueIdentifier>{3b973273-2228-46c2-9e48-d754127b5715}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
-    <Filter Include="Source files\Device-specific files">
-      <UniqueIdentifier>{07548530-31c0-4887-bab4-8784505ac40c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source files\Device-specific files\Drivers">
-      <UniqueIdentifier>{b780040d-e794-4d57-b772-9ce99b2bde5e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header files\Device-specific files">
       <UniqueIdentifier>{ecf20cb1-cf58-4fc0-af61-91a2ad4a0562}</UniqueIdentifier>
     </Filter>
@@ -37,46 +31,16 @@
     <Filter Include="Source files\Application">
       <UniqueIdentifier>{01a5cdbf-f5aa-4ebe-aeec-f5e784dd6147}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source files\Device-specific files">
+      <UniqueIdentifier>{22fc3f1f-17d9-4eae-8f18-151b4a50b26b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Device-specific files\Drivers">
+      <UniqueIdentifier>{bd877eda-d494-47ee-989d-bc64b19192cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="esp8266.props">
-      <Filter>Source files\Device-specific files</Filter>
-    </None>
-    <ClCompile Include="$(BSP_ROOT)\GDBStub\gdbstub-entry.S">
-      <Filter>Source files\Device-specific files</Filter>
-    </ClCompile>
-    <ClCompile Include="$(BSP_ROOT)\GDBStub\gdbstub.c">
-      <Filter>Source files\Device-specific files</Filter>
-    </ClCompile>
-    <ClCompile Include="$(BSP_ROOT)\sysprogs\stubs.c">
-      <Filter>Source files\Device-specific files</Filter>
-    </ClCompile>
-    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\gpio.c">
-      <Filter>Source files\Device-specific files\Drivers</Filter>
-    </ClCompile>
-    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\hw_timer.c">
-      <Filter>Source files\Device-specific files\Drivers</Filter>
-    </ClCompile>
-    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\i2c_master.c">
-      <Filter>Source files\Device-specific files\Drivers</Filter>
-    </ClCompile>
-    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\spi_interface.c">
-      <Filter>Source files\Device-specific files\Drivers</Filter>
-    </ClCompile>
-    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\uart.c">
-      <Filter>Source files\Device-specific files\Drivers</Filter>
-    </ClCompile>
     <ClInclude Include="user_config.h">
       <Filter>Header files</Filter>
-    </ClInclude>
-    <ClInclude Include="$(BSP_ROOT)\GDBStub\gdbstub-cfg.h">
-      <Filter>Header files\Device-specific files</Filter>
-    </ClInclude>
-    <ClInclude Include="$(BSP_ROOT)\GDBStub\gdbstub-entry.h">
-      <Filter>Header files\Device-specific files</Filter>
-    </ClInclude>
-    <ClInclude Include="$(BSP_ROOT)\GDBStub\gdbstub.h">
-      <Filter>Header files\Device-specific files</Filter>
     </ClInclude>
     <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\airkiss.h">
       <Filter>Header files\Device-specific files\SDK</Filter>
@@ -192,15 +156,42 @@
     <None Include="esp8266.xml">
       <Filter>VisualGDB settings</Filter>
     </None>
+    <None Include="esp8266.props">
+      <Filter>Source files\Device-specific files</Filter>
+    </None>
+    <ClCompile Include="$(BSP_ROOT)\sysprogs\stubs.c">
+      <Filter>Source files\Device-specific files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\gpio.c">
+      <Filter>Source files\Device-specific files\Drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\hw_timer.c">
+      <Filter>Source files\Device-specific files\Drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\i2c_master.c">
+      <Filter>Source files\Device-specific files\Drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\spi_interface.c">
+      <Filter>Source files\Device-specific files\Drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\uart.c">
+      <Filter>Source files\Device-specific files\Drivers</Filter>
+    </ClCompile>
+    <ClInclude Include="UartProcess.h">
+      <Filter>Header files\Application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="user_main.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="Application\SocketServer.c">
+    <ClCompile Include="UartProcess.c">
       <Filter>Source files\Application</Filter>
     </ClCompile>
-    <ClCompile Include="Application\SPI.c">
+    <ClCompile Include="Application\SimpleSignalSolts.c">
+      <Filter>Source files\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\SocketServer.c">
       <Filter>Source files\Application</Filter>
     </ClCompile>
   </ItemGroup>

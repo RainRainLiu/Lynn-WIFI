@@ -3,7 +3,7 @@ extern "C"
 {
 #endif
 #include "esp_common.h"
-
+#include "uart.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
@@ -11,19 +11,45 @@ extern "C"
 #include "lwip/dns.h"
 #include "lwip/netdb.h"
 
+#include "UartProcess.h"
 #include "SocketServer.h"
 #include "user_config.h"
 #include "MyDefine.h"
+
 void user_init(void);
 #ifdef __cplusplus
 }
 #endif
 
 #ifdef ESP8266_GDBSTUB
-#include <gdbstub.h>
+//#include <gdbstub.h>
 #endif
 
+/******************************************************************
+* @函数说明：   接收数据的槽
+* @输入参数：   void *slotsArg, 槽参数。句柄
+void *pArg      新状态
+* @输出参数：   无
+* @返回参数：   无
+* @修改记录：   ----
+******************************************************************/
+static void Uart_ReceiveData(void *slotsArg, void *pArg)
+{
 
+}
+
+/******************************************************************
+* @函数说明：   接收数据的槽
+* @输入参数：   void *slotsArg, 槽参数。句柄
+void *pArg      新状态
+* @输出参数：   无
+* @返回参数：   无
+* @修改记录：   ----
+******************************************************************/
+static void Socket_ReceiveData(void *slotsArg, void *pArg)
+{
+
+}
 
 
 static void Socket_RxCB(void *pvParameters, uint8 *pData, uint32 unLength)
@@ -55,9 +81,11 @@ void dhcps_lease_test(void)
 void RAMFUNC user_init(void)
 {
 #ifdef ESP8266_GDBSTUB
-	gdbstub_init();
+	//gdbstub_init();
 #endif
 	system_update_cpu_freq(160);	//160M
+
+	//UART_SetPrintPort(UART1);
 
 	os_printf("\r\n******************************************\r\n");
 	os_printf("SDK version:%s\n", system_get_sdk_version());
@@ -95,7 +123,8 @@ void RAMFUNC user_init(void)
 	os_printf("statrt\r\n");
 
 	//SocketServer_Create(6666, Socket_RxCB, NULL);
-
+	UartProcess_Create(UART0, 115200);
+	SocketServer_Create(6666);
 
 	xTaskCreate(ServerTask, (signed char *)"Server", 256, NULL, 2, NULL);
 }

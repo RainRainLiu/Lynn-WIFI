@@ -1,0 +1,18 @@
+Debug/spi_interface.o: \
+ C:/SysGCC/esp8266/esp8266-bsp/RTOS-SDK/driver_lib/driver/spi_interface.c \
+ C:/SysGCC/esp8266/esp8266-bsp/RTOS-SDK/driver_lib/include/spi_interface.h \
+ C:/SysGCC/esp8266/esp8266-bsp/RTOS-SDK/driver_lib/include/spi_register.h \
+ C:/SysGCC/esp8266/esp8266-bsp/RTOS-SDK/include/espressif/c_types.h \
+ c:\sysgcc\esp8266\lib\gcc\xtensa-lx106-elf\5.2.0\include\stdint.h \
+ c:\sysgcc\esp8266\xtensa-lx106-elf\sys-include\stdint.h \
+ c:\sysgcc\esp8266\xtensa-lx106-elf\sys-include\_ansi.h \
+ c:\sysgcc\esp8266\xtensa-lx106-elf\sys-include\newlib.h \
+ c:\sysgcc\esp8266\xtensa-lx106-elf\sys-include\sys\config.h \
+ c:\sysgcc\esp8266\xtensa-lx106-elf\sys-include\machine\ieeefp.h \
+ c:\sysgcc\esp8266\xtensa-lx106-elf\sys-include\sys\features.h \
+ C:/SysGCC/esp8266/esp8266-bsp/RTOS-SDK/extra_include/xtensa/config/core-isa.h \
+ c:\sysgcc\esp8266\lib\gcc\xtensa-lx106-elf\5.2.0\include\stdbool.h \
+ c:\sysgcc\esp8266\lib\gcc\xtensa-lx106-elf\5.2.0\include\stddef.h \
+ C:/SysGCC/esp8266/esp8266-bsp/RTOS-SDK/include/espressif/esp8266/eagle_soc.h \
+ C:/SysGCC/esp8266/esp8266-bsp/RTOS-SDK/include/espressif/esp8266/ets_sys.h \
+ C:/SysGCC/esp8266/esp8266-bsp/RTOS-SDK/include/espressif/esp_libc.h

@@ -33,11 +33,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">
     <GNUConfigurationType>Debug</GNUConfigurationType>
     <ToolchainID>com.visualgdb.xtensa-lx106-elf</ToolchainID>
-    <ToolchainVersion>5.2.0/7.11/r11</ToolchainVersion>
+    <ToolchainVersion>5.2.0/7.11/r15</ToolchainVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|VisualGDB'">
     <ToolchainID>com.visualgdb.xtensa-lx106-elf</ToolchainID>
-    <ToolchainVersion>5.2.0/7.11/r11</ToolchainVersion>
+    <ToolchainVersion>5.2.0/7.11/r15</ToolchainVersion>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">
     <ClCompile>
@@ -63,25 +63,15 @@
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <ItemGroup>
+    <ClCompile Include="Application\SimpleSignalSolts.c" />
     <ClCompile Include="Application\SocketServer.c" />
-    <ClCompile Include="Application\SPI.c" />
+    <ClCompile Include="UartProcess.c" />
     <ClCompile Include="user_main.c" />
-    <None Include="esp8266.props" />
-    <ClCompile Include="$(BSP_ROOT)\GDBStub\gdbstub-entry.S" />
-    <ClCompile Include="$(BSP_ROOT)\GDBStub\gdbstub.c" />
-    <ClCompile Include="$(BSP_ROOT)\sysprogs\stubs.c" />
-    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\gpio.c" />
-    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\hw_timer.c" />
-    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\i2c_master.c" />
-    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\spi_interface.c" />
-    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\uart.c" />
     <ClInclude Include="Application\MyDefine.h" />
     <ClInclude Include="Application\SocketServer.h" />
     <ClInclude Include="Application\spi.h" />
+    <ClInclude Include="UartProcess.h" />
     <ClInclude Include="user_config.h" />
-    <ClInclude Include="$(BSP_ROOT)\GDBStub\gdbstub-cfg.h" />
-    <ClInclude Include="$(BSP_ROOT)\GDBStub\gdbstub-entry.h" />
-    <ClInclude Include="$(BSP_ROOT)\GDBStub\gdbstub.h" />
     <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\airkiss.h" />
     <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\c_types.h" />
     <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\include\espressif\espconn.h" />
@@ -119,6 +109,15 @@
     <ClInclude Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\include\uart.h" />
     <None Include="Lynn-ESP8266-Debug.vgdbsettings" />
     <None Include="Lynn-ESP8266-Release.vgdbsettings" />
-    <None Include="esp8266.xml" />
+    <None Include="esp8266.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="esp8266.props" />
+    <ClCompile Include="$(BSP_ROOT)\sysprogs\stubs.c" />
+    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\gpio.c" />
+    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\hw_timer.c" />
+    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\i2c_master.c" />
+    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\spi_interface.c" />
+    <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\uart.c" />
   </ItemGroup>
 </Project>

@@ -9,8 +9,8 @@
 <!-- In order to build this project manually (outside VisualGDB), please provide TOOLCHAIN_ROOT, BSP_ROOT, EFP_BASE and TESTFW_BASE variables via Environment or Make command line -->
 	<ItemDefinitionGroup>
 		<ClCompile>
-			<PreprocessorDefinitions>ESP8266_GDBSTUB;GDBSTUB_BREAK_ON_INIT=1;GDBSTUB_FREERTOS=1;USE_FREERTOS;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
-			<AdditionalIncludeDirectories>$(ProjectDir);$(BSP_ROOT)/sysprogs/include;$(BSP_ROOT)/RTOS-SDK/include/espressif;$(BSP_ROOT)/RTOS-SDK/include/espressif/esp8266;$(BSP_ROOT)/RTOS-SDK/include/lwip;$(BSP_ROOT)/RTOS-SDK/include/lwip/ipv4;$(BSP_ROOT)/RTOS-SDK/include/lwip/ipv6;$(BSP_ROOT)/RTOS-SDK/include;$(BSP_ROOT)/RTOS-SDK/extra_include;$(BSP_ROOT)/RTOS-SDK/driver_lib/include;$(BSP_ROOT)/GDBStub;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<PreprocessorDefinitions>ICACHE_FLASH;GDBSTUB_BREAK_ON_INIT=1;GDBSTUB_FREERTOS=1;USE_FREERTOS;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
+			<AdditionalIncludeDirectories>$(ProjectDir);$(BSP_ROOT)/RTOS-SDK/include/espressif;$(BSP_ROOT)/RTOS-SDK/include/espressif/esp8266;$(BSP_ROOT)/RTOS-SDK/include/lwip;$(BSP_ROOT)/RTOS-SDK/include/lwip/ipv4;$(BSP_ROOT)/RTOS-SDK/include/lwip/ipv6;$(BSP_ROOT)/RTOS-SDK/include;$(BSP_ROOT)/RTOS-SDK/extra_include;$(BSP_ROOT)/RTOS-SDK/driver_lib/include;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 			<AdditionalOptions>-mlongcalls -mtext-section-literals -mlongcalls -mtext-section-literals %(ClCompile.AdditionalOptions)</AdditionalOptions>
 		</ClCompile>
 	</ItemDefinitionGroup>

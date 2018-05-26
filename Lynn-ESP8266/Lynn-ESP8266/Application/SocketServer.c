@@ -1,38 +1,40 @@
 #include "SocketServer.h"
 #include "MyDefine.h"
 #include "user_config.h"
-
 #include "esp_common.h"
-
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "lwip/sockets.h"
 #include "freertos/queue.h"
 #include "freertos/timers.h"
+#include "SimpleSignalSolts.h"
 
-
+typedef struct
+{
+	xQueueHandle	hClientQueue;
+	int				nSocketHandle;
+	SIMPLE_SIGNAL	hSignalRx;
+	int				hTaskRead;
+	int				hTaskWrite;
+}SOCKET_CLIENT_T;
 
 typedef struct
 {
 	int nServerHandle; 	//服务端句柄
-	int anClientHandleTalbe[SOCKET_SERVER_MAXIMUN_CONNECTION];	//客户端句柄列表
-	uint8_t *pReading;	//正在读取的数据指针
 	xQueueHandle hClientQueue;
 	xTimerHandle hRxTimer;	//接收数据的定时器，定时器超时才可以往缓存区写入数据
+	SIMPLE_SIGNAL	hSignalRx;
+	SOCKET_CLIENT_T	*paClientTable[SOCKET_SERVER_MAXIMUN_CONNECTION];
 }SOCKET_SERVER_T;
 
 
-typedef struct
-{
-	int *pnSocketHandle;
-	uint8_t bReading;
-	SOCKET_SERVER_T *hServer;
-}SOCKET_RECEIVE_T;
+
+
 
 /******************************************************************
 * @函数说明：   接收客户端发送过来的数据，放入接收队列
-				为了防止多个客户端同时写入数据时，打乱了数据包顺序
-			    要等待其它客户端写完数据再写入
+为了防止多个客户端同时写入数据时，打乱了数据包顺序
+要等待其它客户端写完数据再写入
 * @输入参数：   void *pvParameters
 * @返回参数：
 * @修改记录：   2017/10/28 初版
@@ -40,46 +42,65 @@ typedef struct
 static void SocketServer_ReveiveClient(void *pvParameters)
 {
 	CheckNull(pvParameters);
-
-	SOCKET_RECEIVE_T *receive = pvParameters;
-
-	int socketHandle = *receive->pnSocketHandle;
-	receive->bReading = 0;
+	SOCKET_CLIENT_T *client = pvParameters;
 	uint8_t *rxBuf;
 	rxBuf = os_malloc(SCOKET_SERVER_RECEIVE_BUFF_LENGTH);  //分配内存
+	SOCKET_SERVER_DATA_ITEM_T sData;
 
 	while (1)
 	{
-		int length = read(socketHandle, rxBuf, SCOKET_SERVER_RECEIVE_BUFF_LENGTH);	//接收数据
+		int length = read(client->nSocketHandle, rxBuf, SCOKET_SERVER_RECEIVE_BUFF_LENGTH);	//接收数据
 		if (length > 0)
 		{
-			if (receive->hServer->pReading == NULL)
-			{
-				
-			}
-			else if (*receive->hServer->pReading && receive->hServer->pReading != &receive->bReading)	//别的线程在往队里写入数据
-			{
-				while (*receive->hServer->pReading)	//等待完成
-				{
-					vTaskDelay(1);
-				}
-			}
-			
-			receive->bReading = 1;	//忙，正在读取
-			receive->hServer->pReading = &receive->bReading;	//执行当前对象的忙标志
-			xQueueSend(receive->hServer->hClientQueue, rxBuf, 1000);
-			xTimerReset(receive->hServer->hRxTimer, 1000);
+			sData.pData = rxBuf;
+			sData.unLength = length;
+			SIMPLE_EMIT(client->hSignalRx, &sData);
 		}
 		else
 		{
-			close(socketHandle);
-			receive->pnSocketHandle = 0;	//清空指针
-			os_printf("read error %d\r\n", length);
+			vTaskDelete(client->hTaskWrite);	//删除写进程
+			close(client->nSocketHandle);		//关闭连接
+			vQueueDelete(client->hClientQueue);
+			os_free(client);					//释放自身
 			break;
 		}
 	}
 	os_free(rxBuf);
-	os_free(receive);
+	vTaskDelete(NULL);	//删除自身
+}
+
+/******************************************************************
+* @函数说明：   接收客户端发送过来的数据，放入接收队列
+为了防止多个客户端同时写入数据时，打乱了数据包顺序
+要等待其它客户端写完数据再写入
+* @输入参数：   void *pvParameters
+* @返回参数：
+* @修改记录：   2017/10/28 初版
+******************************************************************/
+static void SocketServer_WriteClient(void *pvParameters)
+{
+	CheckNull(pvParameters);
+	SOCKET_CLIENT_T *client = pvParameters;
+
+	SOCKET_SERVER_DATA_ITEM_T sData;
+
+	while (1)
+	{
+		if (xQueueReceive(client->hClientQueue, &sData, portMAX_DELAY) == pdTRUE)
+		{
+			int result = write(client->nSocketHandle, sData.pData, sData.unLength);
+			os_free(sData.pData);
+
+			if (result != sData.unLength)
+			{
+				vTaskDelete(client->hTaskRead);		//删除读取进程
+				close(client->nSocketHandle);		//关闭连接
+				vQueueDelete(client->hClientQueue);
+				os_free(client);					//释放自身
+				break;
+			}
+		}
+	}
 	vTaskDelete(NULL);	//删除自身
 }
 
@@ -149,21 +170,12 @@ static void SocketServer_Task(void *pvParameters)
 		os_printf("clientHandle %d\r\n", clientHandle);
 		if (clientHandle > 0)
 		{
-			uint8_t i;
+			SOCKET_CLIENT_T *client = os_malloc(sizeof(SOCKET_CLIENT_T));
 
-			for (i = 0; i < SOCKET_SERVER_MAXIMUN_CONNECTION; i++)
-			{
-				if (server->anClientHandleTalbe[i] == 0)
-				{
-					server->anClientHandleTalbe[i] = clientHandle;
-
-					SOCKET_RECEIVE_T *receive = os_malloc(sizeof(SOCKET_RECEIVE_T));
-					receive->pnSocketHandle = &server->anClientHandleTalbe[i];
-					receive->hServer = server;
-					xTaskCreate(SocketServer_ReveiveClient, (signed char *)"SoeketReceive", 256, receive, 5, NULL);
-					break;
-				}
-			}
+			client->hSignalRx = server->hSignalRx;
+			client->hClientQueue = xQueueCreate(32, sizeof(SOCKET_SERVER_DATA_ITEM_T));
+			xTaskCreate(SocketServer_ReveiveClient, (signed char *)"ReveiveClient", 128, client, 5, NULL);
+			xTaskCreate(SocketServer_WriteClient, (signed char *)"WriteClient", 128, client, 5, NULL);
 		}
 		else
 		{
@@ -177,7 +189,7 @@ static void SocketServer_Task(void *pvParameters)
 void SocketServer_TimerCB(xTimerHandle xTimer)
 {
 	SOCKET_SERVER_T *server = pvTimerGetTimerID(xTimer);
-	server->pReading = 0;
+	//server->pReading = 0;
 }
 
 /******************************************************************
