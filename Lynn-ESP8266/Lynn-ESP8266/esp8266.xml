@@ -21,7 +21,7 @@
       </KeyValue>
       <KeyValue>
         <Key>com.sysprogs.esp8266.gdbstub</Key>
-        <Value />
+        <Value>ESP8266_GDBSTUB</Value>
       </KeyValue>
       <KeyValue>
         <Key>com.sysprogs.esp8266.gdbstub.break</Key>

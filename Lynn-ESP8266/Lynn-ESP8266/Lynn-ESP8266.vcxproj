@@ -119,5 +119,10 @@
     <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\i2c_master.c" />
     <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\spi_interface.c" />
     <ClCompile Include="$(BSP_ROOT)\RTOS-SDK\driver_lib\driver\uart.c" />
+    <ClCompile Include="$(BSP_ROOT)\GDBStub\gdbstub-entry.S" />
+    <ClCompile Include="$(BSP_ROOT)\GDBStub\gdbstub.c" />
+    <ClInclude Include="$(BSP_ROOT)\GDBStub\gdbstub-cfg.h" />
+    <ClInclude Include="$(BSP_ROOT)\GDBStub\gdbstub-entry.h" />
+    <ClInclude Include="$(BSP_ROOT)\GDBStub\gdbstub.h" />
   </ItemGroup>
 </Project>

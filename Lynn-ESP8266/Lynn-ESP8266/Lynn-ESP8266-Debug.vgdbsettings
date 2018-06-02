@@ -63,12 +63,12 @@
         <BootloaderResetDelay>50</BootloaderResetDelay>
         <BootloaderActivationSequence>!DTR;RTS;SLEEP;DTR;!RTS;SLEEP;!DTR;SLEEP</BootloaderActivationSequence>
         <FLASHSettings>
-          <Size>size4M</Size>
+          <Size>size16M</Size>
           <Frequency>freq40M</Frequency>
-          <Mode>QIO</Mode>
+          <Mode>DIO</Mode>
         </FLASHSettings>
         <ProgramMode>Enabled</ProgramMode>
-        <ResetMode>Soft</ResetMode>
+        <ResetMode>Hard</ResetMode>
         <SuppressResetConfirmation>false</SuppressResetConfirmation>
       </Configuration>
     </DebugMethod>

@@ -17,6 +17,19 @@ typedef struct
 	UART_Port					uart_no;
 }UART_PROCESS_T;
 
+LOCAL void uart_tx_one_char(uint8 uart, uint8 TxChar)
+{
+	while (true) {
+		uint32 fifo_cnt = READ_PERI_REG(UART_STATUS(uart)) & (UART_TXFIFO_CNT << UART_TXFIFO_CNT_S);
+
+		if ((fifo_cnt >> UART_TXFIFO_CNT_S & UART_TXFIFO_CNT) < 126) {
+			break;
+		}
+	}
+
+	WRITE_PERI_REG(UART_FIFO(uart), TxChar);
+	return;
+}
 
 /******************************************************************
 * @函数名称：   Uart0_rx_intr_handler
@@ -121,7 +134,7 @@ static void UartProcess_Task(void *pvParameters)
 	{
 		if (xQueueReceive(uartProcess->hRxQueue, &data, portMAX_DELAY) == pdTRUE)
 		{
-			SIMPLE_EMIT(uartProcess->hSignalRx, data);
+			SIMPLE_EMIT(uartProcess->hSignalRx, &data);
 		}
 	}
 }
@@ -158,4 +171,24 @@ ErrorStatus UartProcess_RegisterRxCB(UART_PROCESS_HANDLE_T hHadnle, SIMPLE_SOLTS
 	}
 	UART_PROCESS_T *uartProcess = hHadnle;
 	return SimpleSignalSolts_Connect(&uartProcess->hSignalRx, slots, pArg);
+}
+/******************************************************************
+* @函数说明：   串口写入数据，堵塞式
+* @输入参数：   UART_PROCESS_HANDLE_T hHandle 句柄
+				uint8_t *pData, 数据指针
+				uint32_t unLength	数据长度
+* @返回参数：   int 写入长度
+* @修改记录：   2017/10/28 初版
+******************************************************************/
+int UartProcess_Write(UART_PROCESS_HANDLE_T hHandle, uint8_t *pData, uint32_t unLength)
+{
+	CheckNull(hHandle);
+	UART_PROCESS_T *uartProcess = hHandle;
+	uint32_t i;
+	for (i = 0; i < unLength; i++)
+	{
+		uart_tx_one_char(uartProcess->uart_no, pData[i]);
+	}
+	
+	return unLength;
 }

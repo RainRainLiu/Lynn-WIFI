@@ -14,8 +14,9 @@ typedef struct
 	xQueueHandle	hClientQueue;
 	int				nSocketHandle;
 	SIMPLE_SIGNAL	hSignalRx;
-	int				hTaskRead;
-	int				hTaskWrite;
+	xTaskHandle		hTaskRead;
+	xTaskHandle		hTaskWrite;
+	void *			hServer;
 }SOCKET_CLIENT_T;
 
 typedef struct
@@ -25,11 +26,53 @@ typedef struct
 	xTimerHandle hRxTimer;	//接收数据的定时器，定时器超时才可以往缓存区写入数据
 	SIMPLE_SIGNAL	hSignalRx;
 	SOCKET_CLIENT_T	*paClientTable[SOCKET_SERVER_MAXIMUN_CONNECTION];
+	
 }SOCKET_SERVER_T;
 
 
+/******************************************************************
+* @函数说明：   关闭客户端，释放客户端占用的资源
+* @输入参数：   SOCKET_CLIENT_T *client, 
+			    xTaskHandle nowTask
+* @返回参数：
+* @修改记录：   2017/10/28 初版
+******************************************************************/
+static void SocketServer_CloseClient(SOCKET_CLIENT_T *client, xTaskHandle nowTask)
+{
+	CheckNull(client);
+	SOCKET_SERVER_T *server = client->hServer;
 
+	uint32_t i;
+	for (i = 0; i < SOCKET_SERVER_MAXIMUN_CONNECTION; i++)
+	{
+		if (server->paClientTable[i] == client)
+		{
+			server->paClientTable[i] = 0;
+		}
+	}
+	if (nowTask == NULL)//在关闭SOCKET连接之前要关闭另外一个进程，以防重复关闭
+	{
+		vTaskDelete(client->hTaskWrite);	//删除写进程
+		vTaskDelete(client->hTaskRead);	//删除写进程
+	}
+	else if (nowTask == client->hTaskRead)	//先关闭另外一个
+	{
+		vTaskDelete(client->hTaskWrite);	//删除写进程
+	}
+	else
+	{
+		vTaskDelete(client->hTaskRead);	//删除写进程
+	}
 
+	close(client->nSocketHandle);		//关闭连接
+	vQueueDelete(client->hClientQueue);
+	os_free(client);					//释放自身
+
+	if (nowTask != NULL)
+	{
+		vTaskDelete(nowTask);
+	}
+}
 
 /******************************************************************
 * @函数说明：   接收客户端发送过来的数据，放入接收队列
@@ -58,10 +101,8 @@ static void SocketServer_ReveiveClient(void *pvParameters)
 		}
 		else
 		{
-			vTaskDelete(client->hTaskWrite);	//删除写进程
-			close(client->nSocketHandle);		//关闭连接
-			vQueueDelete(client->hClientQueue);
-			os_free(client);					//释放自身
+			os_free(rxBuf);
+			SocketServer_CloseClient(client, client->hTaskRead);
 			break;
 		}
 	}
@@ -93,10 +134,7 @@ static void SocketServer_WriteClient(void *pvParameters)
 
 			if (result != sData.unLength)
 			{
-				vTaskDelete(client->hTaskRead);		//删除读取进程
-				close(client->nSocketHandle);		//关闭连接
-				vQueueDelete(client->hClientQueue);
-				os_free(client);					//释放自身
+				SocketServer_CloseClient(client, client->hTaskWrite);
 				break;
 			}
 		}
@@ -170,12 +208,25 @@ static void SocketServer_Task(void *pvParameters)
 		os_printf("clientHandle %d\r\n", clientHandle);
 		if (clientHandle > 0)
 		{
-			SOCKET_CLIENT_T *client = os_malloc(sizeof(SOCKET_CLIENT_T));
-
-			client->hSignalRx = server->hSignalRx;
-			client->hClientQueue = xQueueCreate(32, sizeof(SOCKET_SERVER_DATA_ITEM_T));
-			xTaskCreate(SocketServer_ReveiveClient, (signed char *)"ReveiveClient", 128, client, 5, NULL);
-			xTaskCreate(SocketServer_WriteClient, (signed char *)"WriteClient", 128, client, 5, NULL);
+			uint8 i;
+			for (i = 0; i < SOCKET_SERVER_MAXIMUN_CONNECTION; i++)
+			{
+				if (server->paClientTable[i] == 0)
+				{
+					SOCKET_CLIENT_T *client = os_malloc(sizeof(SOCKET_CLIENT_T));
+					server->paClientTable[i] = client;
+					client->hSignalRx = server->hSignalRx;
+					client->hClientQueue = xQueueCreate(32, sizeof(SOCKET_SERVER_DATA_ITEM_T));
+					xTaskCreate(SocketServer_ReveiveClient, (signed char *)"ReveiveClient", 128, client, 5, NULL);
+					xTaskCreate(SocketServer_WriteClient, (signed char *)"WriteClient", 128, client, 5, NULL);
+					break;
+				}
+			}
+			if (i >= SOCKET_SERVER_MAXIMUN_CONNECTION)	//客户端数量达到上限
+			{
+				close(clientHandle);
+			}
+			
 		}
 		else
 		{
@@ -227,14 +278,44 @@ int SocketServer_Write(SOCKET_SERVER_HANDLE_T hHandle, uint8_t *pData, uint32_t 
 	CheckNull(hHandle);
 
 	SOCKET_SERVER_T *server = hHandle;
+	SOCKET_SERVER_DATA_ITEM_T dataItem;
+
 	uint8_t i;
 
 	for (i = 0; i < SOCKET_SERVER_MAXIMUN_CONNECTION; i++)
 	{
-		if (server->anClientHandleTalbe[i] != 0)
+		if (server->paClientTable[i] != 0)
 		{
-			write(server->anClientHandleTalbe[i], pData, unLength);
+			dataItem.pData = pData;
+			dataItem.unLength = unLength;
+			if (NMIIrqIsOn)
+			{
+				portBASE_TYPE  worken;
+				xQueueSendFromISR(server->paClientTable[i]->hClientQueue, &dataItem, &worken);
+			}
+			else
+			{
+				xQueueSend(server->paClientTable[i]->hClientQueue, &dataItem, 1000);
+			}
 		}
 	}
 	return 1;
+}
+
+/******************************************************************
+* @函数说明：   注册接收到数据的回调函数
+* @输入参数：   IMPLE_SOLTS slots,         槽
+void *pArg                回调时的参数
+* @输出参数：   无
+* @返回参数：   ErrorStatus
+* @修改记录：   ----
+******************************************************************/
+ErrorStatus SocketServer_RegisterRxCB(SOCKET_SERVER_HANDLE_T hHadnle, SIMPLE_SOLTS slots, void *pArg)
+{
+	if (hHadnle == NULL)
+	{
+		return ERROR;
+	}
+	SOCKET_SERVER_T *server = hHadnle;
+	return SimpleSignalSolts_Connect(&server->hSignalRx, slots, pArg);
 }

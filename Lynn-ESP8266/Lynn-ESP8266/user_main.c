@@ -25,6 +25,8 @@ void user_init(void);
 //#include <gdbstub.h>
 #endif
 
+SOCKET_SERVER_HANDLE_T hServer;
+UART_PROCESS_HANDLE_T hUartProcess;
 /******************************************************************
 * @函数说明：   接收数据的槽
 * @输入参数：   void *slotsArg, 槽参数。句柄
@@ -35,7 +37,7 @@ void *pArg      新状态
 ******************************************************************/
 static void Uart_ReceiveData(void *slotsArg, void *pArg)
 {
-
+	SocketServer_Write(hServer, pArg, 1);
 }
 
 /******************************************************************
@@ -48,6 +50,9 @@ void *pArg      新状态
 ******************************************************************/
 static void Socket_ReceiveData(void *slotsArg, void *pArg)
 {
+	SOCKET_SERVER_DATA_ITEM_T *dataItem = pArg;
+
+	UartProcess_Write(hUartProcess, dataItem->pData, dataItem->unLength);
 
 }
 
@@ -78,11 +83,11 @@ void dhcps_lease_test(void)
 
 
 
-void RAMFUNC user_init(void)
+void user_init(void)
 {
-#ifdef ESP8266_GDBSTUB
+//#ifdef ESP8266_GDBSTUB
 	//gdbstub_init();
-#endif
+//#endif
 	system_update_cpu_freq(160);	//160M
 
 	//UART_SetPrintPort(UART1);
@@ -122,10 +127,15 @@ void RAMFUNC user_init(void)
 
 	os_printf("statrt\r\n");
 
-	//SocketServer_Create(6666, Socket_RxCB, NULL);
-	UartProcess_Create(UART0, 115200);
-	SocketServer_Create(6666);
-
+	hUartProcess = UartProcess_Create(UART0, 115200);
+	hServer = SocketServer_Create(6666);
+	SocketServer_RegisterRxCB(hServer, Socket_ReceiveData, NULL);
+	UartProcess_RegisterRxCB(hUartProcess, Uart_ReceiveData, NULL);
 	xTaskCreate(ServerTask, (signed char *)"Server", 256, NULL, 2, NULL);
+	while (1)
+	{
+		vTaskDelay(1000);
+
+	}
 }
 
