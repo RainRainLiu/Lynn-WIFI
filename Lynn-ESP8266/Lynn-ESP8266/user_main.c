@@ -122,7 +122,7 @@ void user_init(void)
 	wifi_set_ip_info(SOFTAP_IF, &info);
 	dhcps_lease_test();
 	wifi_softap_dhcps_start();
-
+	
 
 
 	os_printf("statrt\r\n");
@@ -131,11 +131,11 @@ void user_init(void)
 	hServer = SocketServer_Create(6666);
 	SocketServer_RegisterRxCB(hServer, Socket_ReceiveData, NULL);
 	UartProcess_RegisterRxCB(hUartProcess, Uart_ReceiveData, NULL);
-	xTaskCreate(ServerTask, (signed char *)"Server", 256, NULL, 2, NULL);
+
 	while (1)
 	{
 		vTaskDelay(1000);
-
+		os_printf("statrt\r\n");
 	}
 }
 

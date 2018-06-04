@@ -18,6 +18,7 @@
     <ProjectFile>Lynn-ESP8266.vcxproj</ProjectFile>
     <RemoteBuildEnvironment>
       <Records />
+      <EnvironmentSetupFiles />
     </RemoteBuildEnvironment>
     <ParallelJobCount>1</ParallelJobCount>
     <SuppressDirectoryChangeMessages>true</SuppressDirectoryChangeMessages>
@@ -63,11 +64,11 @@
         <BootloaderResetDelay>50</BootloaderResetDelay>
         <BootloaderActivationSequence>!DTR;RTS;SLEEP;DTR;!RTS;SLEEP;!DTR;SLEEP</BootloaderActivationSequence>
         <FLASHSettings>
-          <Size>size16M</Size>
+          <Size>size32M_c1</Size>
           <Frequency>freq40M</Frequency>
           <Mode>DIO</Mode>
         </FLASHSettings>
-        <ProgramMode>Enabled</ProgramMode>
+        <ProgramMode>Auto</ProgramMode>
         <ResetMode>Hard</ResetMode>
         <SuppressResetConfirmation>false</SuppressResetConfirmation>
       </Configuration>

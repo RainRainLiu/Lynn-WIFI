@@ -147,6 +147,7 @@ static void UartProcess_Task(void *pvParameters)
 UART_PROCESS_HANDLE_T UartProcess_Create(UART_Port uart_no, uint32 unBaudRate)
 {
 	UART_PROCESS_T *uartProcess = os_malloc(sizeof(UART_PROCESS_T));
+	uartProcess->hRxQueue = xQueueCreate(1, 64);
 
 	Uart0_Init_App(uart_no, unBaudRate, uartProcess);
 
